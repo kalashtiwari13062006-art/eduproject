@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPredict | Student Performance Prediction</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="logo">EduPredict</a>
+
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="#predict">Prediction</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="tag">MACHINE LEARNING PROJECT</span>
+
+            <h1>Predict Your <span>Academic Performance</span></h1>
+
+            <p>
+                Discover your expected final grade using student data
+                and a Machine Learning model trained on a real dataset.
+            </p>
+
+            <a href="#predict" class="primary-btn">
+                Start Prediction →
+            </a>
+        </div>
+
+        <div class="hero-card">
+            <div class="hero-icon">🎓</div>
+            <h3>Smart Grade Predictor</h3>
+            <p>Data-driven academic insights</p>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="stats">
+        <div class="stat-card">
+            <h2>395</h2>
+            <p>Student Records</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>20</h2>
+            <p>Maximum Grade</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>ML</h2>
+            <p>Machine Learning</p>
+        </div>
+    </section>
+
+    <!-- Prediction Section -->
+    <section class="prediction-section" id="predict">
+        <div class="section-heading">
+            <span class="tag">TRY THE MODEL</span>
+            <h2>Student Details</h2>
+            <p>Enter the required details to predict the final grade.</p>
+        </div>
+
+        <form method="POST" action="#predict" class="prediction-form">
+            {% csrf_token %}
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="student_name">Student Name</label>
+                    <input
+                        type="text"
+                        id="student_name"
+                        name="student_name"
+                        placeholder="Enter student name"
+                        value="{{ student_name }}"
+                        maxlength="100"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="roll_number">Roll Number</label>
+                    <input
+                        type="text"
+                        id="roll_number"
+                        name="roll_number"
+                        placeholder="Enter roll number"
+                        value="{{ roll_number }}"
+                        maxlength="30"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="studytime">Study Time</label>
+                    <select id="studytime" name="studytime" required>
+                        <option value="">Select study time</option>
+                        <option value="1">Less than 2 hours/week</option>
+                        <option value="2">2–5 hours/week</option>
+                        <option value="3">5–10 hours/week</option>
+                        <option value="4">More than 10 hours/week</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="failures">Past Class Failures</label>
+                    <input
+                        type="number"
+                        id="failures"
+                        name="failures"
+                        min="0"
+                        max="4"
+                        placeholder="e.g. 0"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="absences">School Absences</label>
+                    <input
+                        type="number"
+                        id="absences"
+                        name="absences"
+                        min="0"
+                        max="93"
+                        placeholder="e.g. 4"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="g1">G1 Grade (0–20)</label>
+                    <input
+                        type="number"
+                        id="g1"
+                        name="g1"
+                        min="0"
+                        max="20"
+                        placeholder="First period grade"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="g2">G2 Grade (0–20)</label>
+                    <input
+                        type="number"
+                        id="g2"
+                        name="g2"
+                        min="0"
+                        max="20"
+                        placeholder="Second period grade"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <button type="submit" class="primary-btn form-submit">
+                Predict Final Grade →
+            </button>
+        </form>
+
+        {% if error %}
+            <div class="result-card error-card">
+                <h3>Check Your Details</h3>
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+
+        {% if result != None %}
+            <div class="result-card">
+                <h3>Prediction Result</h3>
+
+                <p><strong>Student Name:</strong> {{ student_name }}</p>
+                <p><strong>Roll Number:</strong> {{ roll_number }}</p>
+
+                <div class="grade">{{ result }} / 20</div>
+
+                <p>Predicted Final Grade (G3)</p>
+                <p class="result-note">
+                    This is an estimate generated by the Machine Learning model.
+                </p>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <span class="tag">ABOUT THE PROJECT</span>
+        <h2>About EduPredict</h2>
+
+        <p>
+            EduPredict is a student academic performance prediction
+            project built using Django and Machine Learning. It uses
+            study time, past failures, absences and previous grades
+            to estimate a student's final grade.
+        </p>
+
+        <div class="about-points">
+            <div class="about-item">
+                <h3>Machine Learning</h3>
+                <p>Uses a trained Linear Regression model.</p>
+            </div>
+
+            <div class="about-item">
+                <h3>Real Dataset</h3>
+                <p>Trained using 395 student records.</p>
+            </div>
+
+            <div class="about-item">
+                <h3>Quick Prediction</h3>
+                <p>Displays an estimated final grade.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 EduPredict | Student Performance Prediction Project</p>
+    </footer>
+
+</body>
+</html>
